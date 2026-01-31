@@ -44,6 +44,51 @@ const caseSchema = new mongoose.Schema(
                 message: '{VALUE} is not a valid visibility status'
             },
             default: 'DRAFT'
+        },
+        // CIAA-specific fields (optional for backward compatibility)
+        category: {
+            type: String,
+            trim: true
+        },
+        categoryType: {
+            type: String,
+            trim: true
+        },
+        fiscalYear: {
+            type: String,
+            trim: true
+        },
+        fiscalYearGregorian: {
+            type: String,
+            trim: true
+        },
+        accusedPerson: {
+            type: String,
+            trim: true
+        },
+        office: {
+            type: String,
+            trim: true
+        },
+        accusation: {
+            type: String,
+            trim: true
+        },
+        detailUrl: {
+            type: String,
+            trim: true
+        },
+        sourceUrl: {
+            type: String,
+            trim: true
+        },
+        dataSource: {
+            type: String,
+            enum: {
+                values: ['CIAA', 'MANUAL'],
+                message: '{VALUE} is not a valid data source'
+            },
+            default: 'MANUAL'
         }
     },
     {

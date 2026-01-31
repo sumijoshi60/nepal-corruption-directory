@@ -7,10 +7,10 @@ const router = express.Router();
 // @route   GET /api/public/cases
 // @desc    Get all published cases with optional filtering and search (public access)
 // @access  Public
-// @query   ?location=string&role=ACCUSED|INVESTIGATOR|WITNESS&politicalParty=string&year=number&search=string
+// @query   ?location=string&role=ACCUSED|INVESTIGATOR|WITNESS&politicalParty=string&year=number&search=string&category=string&fiscalYear=string&dataSource=CIAA|MANUAL
 router.get('/cases', async (req, res) => {
     try {
-        const { location, role, politicalParty, year, search, page, limit } = req.query;
+        const { location, role, politicalParty, year, search, page, limit, category, fiscalYear, dataSource } = req.query;
 
         // Pagination parameters with defaults
         const currentPage = parseInt(page) || 1;
@@ -40,6 +40,21 @@ router.get('/cases', async (req, res) => {
                     const endDate = new Date(yearNum, 11, 31, 23, 59, 59);
                     matchStage.dateReported = { $gte: startDate, $lte: endDate };
                 }
+            }
+
+            // Add CIAA category filter
+            if (category) {
+                matchStage.category = category;
+            }
+
+            // Add CIAA fiscal year filter
+            if (fiscalYear) {
+                matchStage.fiscalYear = fiscalYear;
+            }
+
+            // Add data source filter
+            if (dataSource) {
+                matchStage.dataSource = dataSource;
             }
 
             // Add case text search using $text index BEFORE $lookup
@@ -197,6 +212,21 @@ router.get('/cases', async (req, res) => {
                     const endDate = new Date(yearNum, 11, 31, 23, 59, 59);
                     filter.dateReported = { $gte: startDate, $lte: endDate };
                 }
+            }
+
+            // Add CIAA category filter
+            if (category) {
+                filter.category = category;
+            }
+
+            // Add CIAA fiscal year filter
+            if (fiscalYear) {
+                filter.fiscalYear = fiscalYear;
+            }
+
+            // Add data source filter
+            if (dataSource) {
+                filter.dataSource = dataSource;
             }
 
             // Get total count for pagination
